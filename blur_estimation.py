@@ -6,13 +6,15 @@ from scipy.ndimage import binary_fill_holes
 
 def blur_estimate(I_g,img_normalised):
     P_init = np.zeros((I_g.shape[0], I_g.shape[1]))
+    arr = [9, 17, 33, 65]
 
-    for r in [9, 17, 33, 65]:
+    for r in arr:
         G_i = cv.GaussianBlur(I_g, (r, r), 0)
         P_init += np.abs(I_g - G_i)
 
-    P_init //= 4
+    P_init //= len(arr)
 
+    # Normalizing the Inintial Blur Map
     P_init = P_init.astype(np.float32) / 255.0
 
     # calculating rough bluriness map
@@ -22,8 +24,7 @@ def blur_estimate(I_g,img_normalised):
     P_r = maximum_filter(P_init, size=(k_size, k_size))
 
     # calculating P_blr
-    kernel = (7, 7)
-    kernel = cv.getStructuringElement(cv.MORPH_RECT, kernel)
+    kernel = cv.getStructuringElement(cv.MORPH_RECT, (7,7))
 
     # Step 1: Dilate the grayscale roughBlurMap
     dilated = cv.dilate(P_r, kernel)

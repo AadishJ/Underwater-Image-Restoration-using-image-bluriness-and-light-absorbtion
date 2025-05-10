@@ -5,12 +5,12 @@ import torch
 import torch.nn as nn
 import cv2.ximgproc as xip
 from blur_estimation import blur_estimate
-from Backgroundlight_estimation import quad_tree_LB,quad_tree_LV,S,BL_estimate,get_top_pixels
+from Backgroundlight_estimation import quad_tree_LB,quad_tree_LV,BL_estimate,get_top_pixels
 from depth_estimation import F_s,depth_mip,depth_estimation
 from TM_estimation import d_o,_k
 import math
 
-img=cv.imread('galdran1_input.jpg')
+img=cv.imread('test2.jpg')
 img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
 
 print(img.shape)
@@ -21,8 +21,7 @@ img_normalised = img.astype(np.float32) / 255.0
 
 """---------------------------------# Part A Estimation of bluriness map P_blr----------------------------"""
 
-img_gray = cv.cvtColor(img, cv.COLOR_RGB2GRAY)
-I_g = img_gray
+I_g = cv.cvtColor(img, cv.COLOR_RGB2GRAY)
 
 radius = 7
 
@@ -94,7 +93,6 @@ blue=img_normalised[:,:,2]
 BL=BL_estimate(BL_1,BL_2,BL_3,red,green,blue)
 
 
-print(BL)
 
 """---------------------------------# Part C Depth Estimation----------------------------------------"""
 
